@@ -1,77 +1,3 @@
-<?php
-
-// SDK de Mercado Pago
-require __DIR__ .  '/vendor/autoload.php';
-
-function baseUrl(){
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['SERVER_NAME']
-    );
-}
-
-// Agrega credenciales
-MercadoPago\SDK::setAccessToken('APP_USR-6317427424180639-042414-47e969706991d3a442922b0702a0da44-469485398');
-MercadoPago\SDK::setIntegratorId('dev_24c65fb163bf11ea96500242ac130004');
-
-// Crea un objeto de preferencia
-$preference = new MercadoPago\Preference();
-
-$payer = new MercadoPago\Payer();
-
-$payer->name = 'Lalo';
-$payer->surname = 'Landa';
-$payer->email = 'test_user_63274575@testuser.com';
-$payer->phone = [
-    'area_code' => '11',
-    'number' => '22223333'
-];
-$payer->address = [
-    'street_name' => 'False',
-    'street_number' => 123,
-    'zip_code' => '1111',
-];
-
-$preference->payer = $payer;
-
-$preference->payment_methods = [
-    'excluded_payment_methods' => [
-        ['id' => 'amex']
-    ],
-    'excluded_payment_types' =>  [
-         ['id' => 'atm']
-    ],
-    'installments' => 6
-];
-
-// Crea un ítem en la preferencia
-$item = new MercadoPago\Item();
-$item->id = uniqid();
-$item->title = $_POST['title'];
-$item->description = 'Dispositivo móvil de Tienda e-commerce';
-$item->picture_url = baseUrl() . '/' . substr($_POST['img'], 2);
-$item->quantity = $_POST['unit'];
-$item->unit_price = $_POST['price'];
-
-$preference->items = [$item];
-
-$preference->external_reference = 'dbzgoku86@gmail.com';
-
-$preference->back_urls = [
-    'success' => baseUrl() . '/procesar-pago.php',
-    'failure' => baseUrl() . '/procesar-pago.php',
-    'pending' => baseUrl() . '/procesar-pago.php'
-];
-
-$preference->auto_return = 'approved';
-
-$preference->notification_url = baseUrl() . '/notification.php';
-
-$preference->save();
-
-?>
-
 <!DOCTYPE html>
 <html class="supports-animation supports-columns svg no-touch no-ie no-oldie no-ios supports-backdrop-filter as-mouseuser" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -86,7 +12,7 @@ $preference->save();
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
 
-    <script src="https://www.mercadopago.com/v2/security.js" view="item"></script>
+    <script src="https://www.mercadopago.com/v2/security.js" view=""></script>
 
     <link rel="stylesheet" href="./assets/category-landing.css" media="screen, print">
 
@@ -153,7 +79,7 @@ $preference->save();
 
                                     <button class="as-filter-button" aria-expanded="true" aria-controls="as-search-filters" type="button">
                                         <h2 class=" as-filter-button-text">
-                                            Smartphones
+                                            Pago Exitoso
                                         </h2>
                                     </button>
 
@@ -163,54 +89,19 @@ $preference->save();
                             </div>
                         </div>
                         <div class="as-accessories-results  as-search-desktop">
-                            <div class="width:60%">
-                                <div class="as-producttile-tilehero with-paddlenav " style="float:left;">
-                                    <div class="as-dummy-container as-dummy-img">
-
-                                        <img src="./assets/wireless-headphones" class="ir ir item-image as-producttile-image  " style="max-width: 70%;max-height: 70%;"alt="" width="445" height="445">
-                                    </div>
-                                    <div class="images mini-gallery gal5 ">
-
-
-                                        <div class="as-isdesktop with-paddlenav with-paddlenav-onhover">
-                                            <div class="clearfix image-list xs-no-js as-util-relatedlink relatedlink" data-relatedlink="6|Powerbeats3 Wireless Earphones - Neighborhood Collection - Brick Red|MPXP2">
-                                                <div class="as-tilegallery-element as-image-selected">
-                                                    <div class=""></div>
-                                                    <img src="./assets/003.jpg" class="ir ir item-image as-producttile-image" alt="" width="445" height="445" style="content:-webkit-image-set(url(<?php echo $_POST['img'] ?>) 2x);">
-                                                </div>
-
-                                            </div>
-
-
-                                        </div>
-
-
-
-                                    </div>
-
-                                </div>
-                                <div class="as-producttile-info" style="float:left;min-height: 168px;">
-                                    <div class="as-producttile-titlepricewraper" style="min-height: 128px;">
-                                        <div class="as-producttile-title">
-                                            <h3 class="as-producttile-name">
-                                                <p class="as-producttile-tilelink">
-                                                    <span data-ase-truncate="2"><?php echo $_POST['title'] ?></span>
-                                                </p>
-
-                                            </h3>
-                                        </div>
-                                        <h3 >
-                                            <?php echo "$" . $_POST['price'] ?>
-                                        </h3>
-                                        <h3 >
-                                            <?php echo $_POST['unit'] ?>
-                                        </h3>
-                                    </div>
-                                    <form action="procesar-pago.php" method="get">
-                                        <input type="hidden" name="initPoint" value="<?php echo $preference->init_point; ?>">
-                                        <button type="submit" class="mercadopago-button" formmethod="post">Pagar la compra</button>
-                                    </form>
-                                </div>
+                            <div class="width:100%">
+                                <table border="1">
+                                    <tr>
+                                        <th>Método de pago</th>
+                                        <th>Referencia externa</th>
+                                        <th>ID de pago</th>
+                                    </tr>
+                                    <tr>
+                                        <td><?php echo $_GET['paymentMethod'] ?></td>
+                                        <td><?php echo $_GET['externalReference'] ?></td>
+                                        <td><?php echo $_GET['paymentId'] ?></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
