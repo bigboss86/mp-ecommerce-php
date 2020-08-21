@@ -47,11 +47,11 @@ $preference->payment_methods = [
 
 // Crea un ítem en la preferencia
 $item = new MercadoPago\Item();
-$item->id = uniqid();
+$item->id = 1234;
 $item->title = $_POST['title'];
 $item->description = 'Dispositivo móvil de Tienda e-commerce';
 $item->picture_url = baseUrl() . '/' . substr($_POST['img'], 2);
-$item->quantity = $_POST['unit'];
+$item->quantity = 1;
 $item->unit_price = $_POST['price'];
 
 $preference->items = [$item];
