@@ -95,11 +95,13 @@
                                         <th>Método de pago</th>
                                         <th>Referencia externa</th>
                                         <th>ID de pago</th>
+                                        <th>ID de preferencia</th>
                                     </tr>
                                     <tr>
                                         <td><?php echo $_GET['paymentMethod'] ?></td>
                                         <td><?php echo $_GET['externalReference'] ?></td>
                                         <td><?php echo $_GET['paymentId'] ?></td>
+                                        <td><?php echo $_GET['preferenceId'] ?></td>
                                     </tr>
                                 </table>
                             </div>

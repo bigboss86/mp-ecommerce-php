@@ -15,8 +15,9 @@ if (isset($_POST['initPoint'])) {
         $paymentMethod = $_GET['payment_type'];
         $externalReference = $_GET['external_reference'];
         $paymentId = $_GET['collection_id'];
+        $preferenceId = $_GET['preference_id'];
 
-        header('Location: ' . baseUrl() . '/success.php?paymentMethod=' . $paymentMethod . '&externalReference=' . $externalReference . '&paymentId=' . $paymentId);
+        header('Location: ' . baseUrl() . '/success.php?paymentMethod=' . $paymentMethod . '&externalReference=' . $externalReference . '&paymentId=' . $paymentId . '&preferenceId=' . $preferenceId);
     } elseif ($_GET['collection_status'] == 'pending' || $_GET['collection_status'] == 'in_process') {
         header('Location: ' . baseUrl() . '/pending.php');
     } elseif ($_GET['collection_status'] == 'rejected') {
